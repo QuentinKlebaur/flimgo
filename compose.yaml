@@ -1,0 +1,30 @@
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+  back:
+    build: ./back
+    ports:
+      - "8080:8080"
+#    develop:
+#      watch:
+#        - action: sync
+#          path: ./back
+#          target: /app
+#          ignore:
+
+  front:
+    build: ./front
+    ports:
+      - "3000:3000"
+#   develop:
+#      watch:
+#        - action: sync
+#          path: ./front
+#          target: /app
+#          ignore:
+#
