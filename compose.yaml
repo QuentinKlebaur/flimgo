@@ -10,21 +10,24 @@ services:
     build: ./back
     ports:
       - "8080:8080"
-#    develop:
-#      watch:
-#        - action: sync
-#          path: ./back
-#          target: /app
-#          ignore:
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./back
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
 
   front:
     build: ./front
     ports:
       - "3000:3000"
-#   develop:
-#      watch:
-#        - action: sync
-#          path: ./front
-#          target: /app
-#          ignore:
-#
+    develop:
+      watch:
+        - action: sync
+          path: ./front
+          target: /app
+          ignore:
+            - node_modules/

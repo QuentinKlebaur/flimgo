@@ -1,9 +1,8 @@
-const express = require('express');
+import UserRouter  from './routes/UserRoute';
+import express from 'express';
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send('<h1>Hello, Express.js Server!</h1>');
-});
+app.use('/users', UserRouter);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
