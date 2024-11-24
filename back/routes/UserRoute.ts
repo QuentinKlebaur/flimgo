@@ -1,6 +1,7 @@
 import express from 'express';
-const router = express.Router();
 import UserService from '../services/UserService';
+
+const router = express.Router();
 
 router.get('/', UserService.getAllUsers);
 
