@@ -5,7 +5,11 @@
   "main": "index.ts",
   "scripts": {
     "start": "npx ts-node index.ts",
-    "swagger-autogen": "node ./swagger.js"
+    "swagger-autogen": "node ./swagger.js",
+    "migration-up": "node-pg-migrate up",
+    "migration-down": "node-pg-migrate down",
+    "migration-redo": "node-pg-migrate redo",
+    "migration-create": "node-pg-migrate create"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +17,7 @@
     "@types/swagger-ui-express": "^4.1.7",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "node-pg-migrate": "^7.7.1",
     "pg": "^8.13.1",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"

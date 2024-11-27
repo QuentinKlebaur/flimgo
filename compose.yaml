@@ -10,6 +10,12 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: my_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
 
   pgadmin:
     image: dpage/pgadmin4
@@ -22,13 +28,14 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     depends_on:
       db:
-        condition: service_completed_successfully
+        condition: service_healthy
 
   back:
     container_name: flimgo_back
     build: ./back
     ports:
       - "8080:8080"
+#    command: ["npm", "run", "migration-up"]
     develop:
       watch:
         - action: sync+restart
@@ -40,7 +47,7 @@ services:
           path: package.json
     depends_on:
       db:
-        condition: service_completed_successfully
+        condition: service_healthy
 
   front:
     container_name: flimgo_front
@@ -56,4 +63,4 @@ services:
             - node_modules/
     depends_on:
       back:
-        condition: service_completed_successfully
+        condition: service_started
