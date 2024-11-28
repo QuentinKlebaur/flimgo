@@ -37,13 +37,13 @@ exports.up = (pgm) => {
         },
         startedAt: {
             type: 'timestamp',
-            notNull: true,
-            default: pgm.func('current_timestamp'),
+            notNull: false,
+            default: null,
         },
         finishedAt: {
             type: 'timestamp',
-            notNull: true,
-            default: pgm.func('current_timestamp'),
+            notNull: false,
+            default: null,
         }
     })
     pgm.createTable('tiles', {
@@ -82,7 +82,7 @@ exports.up = (pgm) => {
         validated: 'boolean'
     })
     pgm.createTable('user_group_rel', {
-        user_Id: {
+        userId: {
             type: 'integer',
             notNull: true,
             references: '"users"',
@@ -122,6 +122,7 @@ exports.up = (pgm) => {
             references: '"tiles"',
             onDelete: 'cascade',
         },
+        checked: 'boolean',
         position: 'integer'
     })
 };

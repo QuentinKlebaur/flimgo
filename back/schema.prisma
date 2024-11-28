@@ -1,0 +1,91 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+    id              String    @id @default(uuid()) @unique
+    email           String    @unique
+    username        String    @unique
+    hashedPassword  String
+    createdAt       DateTime  @default(now())
+    bingos          Bingo[]
+    tiles           Tile[]
+    sessionRel      UserSessionRelModel[]
+    groupRel        UserGroupRelModel[]
+}
+
+model Group {
+    id              String    @id @default(uuid()) @unique
+    name            String
+    createdAt       DateTime  @default(now())
+    sessions        Session[]
+    tiles           Tile[]
+    userRel         UserGroupRelModel[]
+}
+
+model Session {
+    id              String    @id @default(uuid()) @unique
+    groupId         String
+    flimTitle       String    @db.VarChar(255)
+    createdAt       DateTime  @default(now())
+    startedAt       DateTime?
+    finishedAt      DateTime?
+    group           Group     @relation(fields: [groupId], references: [id])
+    bingos          Bingo[]
+    userRel         UserSessionRelModel[]
+}
+
+model Tile {
+    id              String    @id @default(uuid()) @unique
+    groupId         String
+    userId          String?
+    text            String    @db.VarChar(1000)
+    createdAt       DateTime  @default(now())
+    group           Group     @relation(fields: [groupId], references: [id])
+    user            User?     @relation(fields: [userId], references: [id])
+    bingoRel        BingoTileRelModel[]
+}
+
+model Bingo {
+    id              String    @id @default(uuid()) @unique
+    userId          String?
+    sessionId       String
+    validated       Boolean
+    user            User?     @relation(fields: [userId], references: [id])
+    session         Session   @relation(fields: [sessionId], references: [id])
+    tileRel         BingoTileRelModel[]
+}
+
+model BingoTileRelModel {
+    bingoId       String
+    tileId        String
+    position      Int
+    bingo         Bingo     @relation(fields: [bingoId], references: [id])
+    tile          Tile      @relation(fields: [tileId], references: [id])
+
+    @@id([bingoId, tileId])
+}
+
+model UserGroupRelModel {
+    userId        String
+    groupId       String
+    user          User      @relation(fields: [userId], references: [id])
+    group         Group     @relation(fields: [groupId], references: [id])
+
+    @@id([userId, groupId])
+}
+
+model UserSessionRelModel {
+    userId        String
+    sessionId     String
+    checekd       Boolean
+    user          User      @relation(fields: [userId], references: [id])
+    session       Session   @relation(fields: [sessionId], references: [id])
+
+    @@id([userId, sessionId])
+}
