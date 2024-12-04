@@ -1,35 +1,3 @@
-//import swaggerJsdoc from 'swagger-jsdoc';
-//
-//const options = {
-//    definition: {
-//        openapi: '3.0.0',
-//        info: {
-//            version: '0.1.0',
-//            title: 'Flimgo',
-//            description: 'This is Flimgo\'s swagger'
-//        },
-//        servers: [
-//            {
-//                url: 'http://localhost:3000',
-//            },
-//        ],
-//    },
-//    components: {
-//        securitySchemes: {
-//            bearerAuth: {
-//                type: 'http',
-//                scheme: 'bearer',
-//            }
-//        }
-//    },
-//    apis: ['./routes/*.ts'],
-//};
-//
-//
-//const specs = swaggerJsdoc(options);
-//
-//export default specs;
-
 const options = {
     openapi: "OpenAPI 3",
     language: "en-US",
@@ -50,7 +18,7 @@ const generateSwagger = require("swagger-autogen")();
         email: "tiwariankit496@gmail.com",
       },
     },
-    host: "localhost:3000",
+    host: "localhost:8080",
     basePath: "/",
     schemes: ["http"],
     consumes: ["application/json"],

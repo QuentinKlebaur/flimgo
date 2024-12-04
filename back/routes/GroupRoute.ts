@@ -3,8 +3,8 @@ import GroupService from '../services/GroupService';
 
 const router = express.Router();
 
-router.get('/', (req: any, res: any) => {
-    res.json();
+router.get('/', async (req: any, res: any) => {
+    res.json(await GroupService.getGroups());
 });
 
 router.get('/all', (req: any, res: any) => {
@@ -23,8 +23,8 @@ router.get('/:name', (req: any, res: any) => {
     res.json();
 });
 
-router.post('/', (req: any, res: any) => {
-    res.json();
+router.post('/', async (req: any, res: any) => {
+    res.json(await GroupService.addGroup());
 });
 
 router.delete('/:id', (req: any, res: any) => {

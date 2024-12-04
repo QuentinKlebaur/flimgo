@@ -19,14 +19,16 @@ services:
 
   pgadmin:
     container_name: flimgo_pgadmin
-    image: event_driven_io_pgadmin:latest
-    build: ./pgadmin
+    image: dpage/pgadmin4
     depends_on:
       db:
         condition: service_started
     restart: always
     ports:
       - "8888:80"
+    configs:
+      - source: servers.json
+        target: /pgadmin4/servers.json
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_USER}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
@@ -64,3 +66,16 @@ services:
     depends_on:
       back:
         condition: service_started
+
+configs:
+  servers.json:
+    content: |
+      {"Servers": {"1": {
+        "Group": "Servers",
+        "Name": "Flimgo",
+        "Host": "${POSTGRES_HOST}",
+        "Port": ${POSTGRES_PORT},
+        "MaintenanceDB": "postgres",
+        "Username": "${POSTGRES_USER}",
+        "SSLMode": "prefer"
+      }}}

@@ -1,4 +1,4 @@
 #$! /bin/bash
 
-npm run migration-up
+npx prisma migrate deploy
 npm run start
