@@ -11,6 +11,10 @@ require('dotenv').config()
 
 const app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.use('/authentication', AuthenticationRoute);
 app.use('/bingos', BingoRoute);
 app.use('/groups', GroupRoute);
