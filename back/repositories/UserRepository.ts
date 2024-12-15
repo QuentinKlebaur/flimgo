@@ -1,6 +1,8 @@
 import { PrismaClient, User, Prisma } from '@prisma/client'
-import { GroupInput } from '../inputs/inputs';
+import { UserInput } from '../inputs/inputs';
 import { equal } from 'assert';
+import { StatusError } from '../error/StatusError';
+import { RoleValues } from '../services/RoleService';
 
 const prisma = new PrismaClient()
 
@@ -19,40 +21,56 @@ class UserRepository {
             }
         });
         if (user == null) {
-            throw "error";
+            throw new StatusError(404, `User with id (${id}) does not exists`);
         } else
             return user;
     }
 
-    // Create
-    static async createGroup(input: GroupInput) : Promise<User> {
-        let group: Prisma.GroupCreateInput
-
-        group = {
-            name: input.name
+    static async getUserByEmail(email: string) : Promise<User> {
+        const user = await prisma.user.findFirst({
+            where: {
+                email: {
+                    equals: email
+                }
+            }
+        });
+        if (user == null) {
+            throw new StatusError(404, `User with email (${email}) does not exists`);
         }
-        return await prisma.group.create({ data: group })
+        return user;
     }
 
-    // Update
-    static async updateGroupById(input: GroupInput, id: string) : Promise<Prisma.GroupCreateInput> {
-        const group = prisma.group.update({
+    static async getUserByUsername(username: string) : Promise<User> {
+        const user = await prisma.user.findFirst({
             where: {
-                id: id
-            },
+                username: {
+                    equals: username
+                }
+            }
+        });
+        if (user == null) {
+            throw new StatusError(404, `User with username (${username}) does not exists`);
+        }
+        return user;
+    }
+
+    // Create
+    static async createUser(input: Prisma.UserCreateInput, roles: number = RoleValues.USER) : Promise<User> {
+        return await prisma.user.create({
             data: {
-                name: input.name
+                ...input,
+                role: {
+                    create: {
+                        roles: roles
+                    }
+                }
             }
         })
-        if (group == null) {
-            throw "error";
-        } else
-            return group;
     }
 
     // Delete
-    static async deleteGroupById(id: string) {
-        await prisma.group.delete({
+    static async deleteUserById(id: string) {
+        await prisma.user.delete({
             where: {
                 id: id
             }

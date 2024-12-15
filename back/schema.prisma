@@ -17,6 +17,22 @@ model User {
     tiles           Tile[]
     sessionRel      UserSessionRelModel[]
     groupRel        UserGroupRelModel[]
+    tokens          Token[]
+    role            Role?
+}
+
+model Token {
+    userId          String
+    token           String      @unique
+    validUntil      DateTime    @default(now())
+    createdAt       DateTime    @default(now())
+    user            User        @relation(fields: [userId], references: [id])
+}
+
+model Role {
+    userId          String  @unique
+    roles           Int
+    user            User    @relation(fields: [userId], references: [id])
 }
 
 model Group {

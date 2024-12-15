@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient, Group, Prisma } from '@prisma/client'
 import { GroupInput } from '../inputs/inputs';
 import { equal } from 'assert';
 
@@ -6,11 +6,11 @@ const prisma = new PrismaClient()
 
 class GroupRepository {
     // Get
-    static async getAllGroups() : Promise<Prisma.GroupCreateInput[]> {
+    static async getAllGroups() : Promise<Group[]> {
         return await prisma.group.findMany();
     }
 
-    static async getGroupById(id: string) : Promise<Prisma.GroupCreateInput> {
+    static async getGroupById(id: string) : Promise<Group> {
         const group = await prisma.group.findFirst({
             where: {
                 id: {
@@ -24,7 +24,7 @@ class GroupRepository {
             return group;
     }
 
-    static async getGroupsByUserId(userId: string) : Promise<Prisma.GroupCreateInput[]> {
+    static async getGroupsByUserId(userId: string) : Promise<Group[]> {
         return await prisma.group.findMany({
             where: {
                 userRel: {
@@ -39,7 +39,7 @@ class GroupRepository {
     }
 
     // Create
-    static async createGroup(input: GroupInput) : Promise<Prisma.GroupCreateInput> {
+    static async createGroup(input: GroupInput) : Promise<Group> {
         let group: Prisma.GroupCreateInput
 
         group = {
@@ -49,7 +49,7 @@ class GroupRepository {
     }
 
     // Update
-    static async updateGroupById(input: GroupInput, id: string) : Promise<Prisma.GroupCreateInput> {
+    static async updateGroupById(input: GroupInput, id: string) : Promise<Group> {
         const group = prisma.group.update({
             where: {
                 id: id

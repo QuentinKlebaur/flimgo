@@ -5,5 +5,10 @@ export interface GroupInput {
 export interface UserInput {
     email: string
     username: string
-    hashedPassword: string
+    password: string
+}
+
+export interface LoginInput {
+    email: string
+    password: string
 }

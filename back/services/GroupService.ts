@@ -1,16 +1,16 @@
 import GroupRepository from '../repositories/GroupRepository';
 import { GroupInput } from '../inputs/inputs';
 import { GroupOutput } from '../outputs/outputs';
-import { Prisma } from '@prisma/client';
+import { Group } from '@prisma/client';
 
 class GroupService {
     // Get
     static async getGroups() : Promise<GroupOutput[]> {
-        return (await GroupRepository.getAllGroups()).map((model: Prisma.GroupCreateInput) => new GroupOutput(model));
+        return (await GroupRepository.getAllGroups()).map((model: Group) => new GroupOutput(model));
     }
 
     static async getGroupByUserId(userId: string) : Promise<GroupOutput[]> {
-        return (await GroupRepository.getGroupsByUserId(userId)).map((model: Prisma.GroupCreateInput) => new GroupOutput(model));
+        return (await GroupRepository.getGroupsByUserId(userId)).map((model: Group) => new GroupOutput(model));
     }
 
     static async getGroupById(id: string) : Promise<GroupOutput> {

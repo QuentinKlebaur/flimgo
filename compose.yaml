@@ -50,6 +50,7 @@ services:
     depends_on:
       db:
         condition: service_started
+    restart: always
 
   front:
     container_name: flimgo_front
