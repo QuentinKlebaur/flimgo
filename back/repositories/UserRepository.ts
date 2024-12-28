@@ -54,6 +54,40 @@ class UserRepository {
         return user;
     }
 
+    static async getUserByAcessToken(token: string) : Promise<User> {
+        const user: User | null = await prisma.user.findFirst({
+            where: {
+                authSessions: {
+                    some: {
+                        accessToken: token
+                    }
+                }
+            }
+        });
+        if (user == null) {
+            throw new StatusError(404, `Session not found`);
+        } else
+            return user;
+    }
+
+    static async getUserByRefreshToken(refreshToken: string) : Promise<Prisma.UserGetPayload<{include: { authSessions: true };}>> {
+        const user: Prisma.UserGetPayload<{include: { authSessions: true };}> | null = await prisma.user.findFirst({
+            where: {
+                authSessions: {
+                    some: {
+                        refreshToken: refreshToken
+                    }
+                }
+            },
+            include: {
+                authSessions: true
+            }
+        });
+        if (user == null) {
+            throw new StatusError(404, `Session not found`);
+        } else
+            return user;
+    }
     // Create
     static async createUser(input: Prisma.UserCreateInput, roles: number = RoleValues.USER) : Promise<User> {
         return await prisma.user.create({

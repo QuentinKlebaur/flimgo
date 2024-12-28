@@ -20,13 +20,13 @@ class RoleRepository {
             return role;
     }
 
-    static async getUserRoleByToken(token: string) : Promise<Role> {
+    static async getUserRoleByAcessToken(token: string) : Promise<Role> {
         const role: Role | null = await prisma.role.findFirst({
             where: {
                 user: {
-                    tokens: {
+                    authSessions: {
                         some: {
-                            token: token
+                            accessToken: token
                         }
                     }
                 }

@@ -15,7 +15,7 @@ class RoleService {
     }
 
     static async userHasRoleByToken(token: string, roles: number[]) : Promise<boolean> {
-        const currentRoles: Role = await RoleRepository.getUserRoleByToken(token)
+        const currentRoles: Role = await RoleRepository.getUserRoleByAcessToken(token)
 
         for (let i: number = 0; i < roles.length; ++i) {
             if ((roles[i] & currentRoles.roles) == 0)

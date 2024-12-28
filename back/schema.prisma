@@ -17,16 +17,18 @@ model User {
     tiles           Tile[]
     sessionRel      UserSessionRelModel[]
     groupRel        UserGroupRelModel[]
-    tokens          Token[]
+    authSessions    AuthenticationSession[]
     role            Role?
 }
 
-model Token {
-    userId          String
-    token           String      @unique
-    validUntil      DateTime    @default(now())
-    createdAt       DateTime    @default(now())
-    user            User        @relation(fields: [userId], references: [id])
+model AuthenticationSession {
+    userId              String
+    accessToken         String      @unique
+    refreshToken        String      @unique
+    accessValidUntil    DateTime    @default(now())
+    refreshValidUntil   DateTime    @default(now())
+    createdAt           DateTime    @default(now())
+    user                User        @relation(fields: [userId], references: [id])
 }
 
 model Role {

@@ -1,4 +1,4 @@
-import { Group, User, Token, Prisma } from '@prisma/client'
+import { Group, User, AuthenticationSession, Prisma } from '@prisma/client'
 
 export class GroupOutput {
     id: string
@@ -26,8 +26,10 @@ export class UserOutput {
 
 export class LoginOutput {
     accessToken: string
+    refreshToken: string
 
-    constructor(model: Token) {
-        this.accessToken = model.token
+    constructor(model: AuthenticationSession) {
+        this.accessToken = model.accessToken
+        this.refreshToken = model.refreshToken
     }
 }
