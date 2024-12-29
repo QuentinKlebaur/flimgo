@@ -39,13 +39,19 @@ class GroupRepository {
     }
 
     // Create
-    static async createGroup(input: GroupInput) : Promise<Group> {
-        let group: Prisma.GroupCreateInput
-
-        group = {
-            name: input.name
+    static async createGroup(input: GroupInput, creatorId: string) : Promise<Group> {
+        let group: Prisma.GroupUncheckedCreateInput = {
+            name: input.name,
+            creatorId: creatorId
         }
-        return await prisma.group.create({ data: group })
+        const groupModel: Group = await prisma.group.create({ data: group })
+        await prisma.userGroupRelModel.create({
+            data: {
+                userId: creatorId,
+                groupId: groupModel.id
+            }
+        })
+        return groupModel
     }
 
     // Update

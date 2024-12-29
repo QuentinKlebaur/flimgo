@@ -18,8 +18,8 @@ class GroupService {
     }
 
     // Add
-    static async createGroup(input: GroupInput) : Promise<GroupOutput> {
-        return new GroupOutput(await GroupRepository.createGroup(input));
+    static async createGroup(input: GroupInput, creatorId: string) : Promise<GroupOutput> {
+        return new GroupOutput(await GroupRepository.createGroup(input, creatorId));
     }
 
     // Update

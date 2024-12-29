@@ -19,6 +19,7 @@ model User {
     groupRel        UserGroupRelModel[]
     authSessions    AuthenticationSession[]
     role            Role?
+    createdGroups   Group[]
 }
 
 model AuthenticationSession {
@@ -40,10 +41,12 @@ model Role {
 model Group {
     id              String    @id @default(uuid()) @unique
     name            String
+    creatorId       String
     createdAt       DateTime  @default(now())
     sessions        Session[]
     tiles           Tile[]
     userRel         UserGroupRelModel[]
+    creator         User      @relation(fields: [creatorId], references: [id])
 }
 
 model Session {
@@ -92,6 +95,7 @@ model BingoTileRelModel {
 model UserGroupRelModel {
     userId        String
     groupId       String
+    roles         Int       @default(0)
     user          User      @relation(fields: [userId], references: [id])
     group         Group     @relation(fields: [groupId], references: [id])
 

@@ -1,3 +1,1 @@
 # flimgo
-
-node_modules/

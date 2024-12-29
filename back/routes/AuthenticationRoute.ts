@@ -29,10 +29,8 @@ router.post('/refresh', [
         async (req: TypedRequest<{}, RefreshInput>, res: Response) => {
             res.status(201).json(await AuthenticationService.refresh(req.body));
         }
-    ),
-    async (req: TypedRequest<{}, {}>, res: Response) => {
-        res.status(501).json();
-}]);
+    )]
+);
 
 router.put('/delete', async (req: TypedRequest<{}, {}>, res: Response) => {
     res.status(501).json();

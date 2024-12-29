@@ -1,4 +1,4 @@
-import { PrismaClient, Role, Prisma } from '@prisma/client'
+import { PrismaClient, Role, UserGroupRelModel, Prisma } from '@prisma/client'
 import { UserInput } from '../inputs/inputs';
 import { equal } from 'assert';
 import { StatusError } from '../error/StatusError';
@@ -16,6 +16,19 @@ class RoleRepository {
         });
         if (role == null) {
             throw new StatusError(404, `User has no roles`);
+        } else
+            return role;
+    }
+
+    static async getUserGroupRoleById(userId: string, groupId: string) : Promise<UserGroupRelModel> {
+        const role: UserGroupRelModel | null = await prisma.userGroupRelModel.findFirst({
+            where: {
+                userId: userId,
+                groupId: groupId
+            }
+        });
+        if (role == null) {
+            throw new StatusError(401, `This user does not belong to the group`);
         } else
             return role;
     }
