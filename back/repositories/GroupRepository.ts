@@ -1,6 +1,8 @@
-import { PrismaClient, Group, Prisma } from '@prisma/client'
-import { GroupInput } from '../inputs/inputs';
+import { PrismaClient, Group, Prisma, GroupInvitation, UserGroupRelModel } from '@prisma/client'
+import { GroupInput, GroupInvitationInput } from '../inputs/inputs';
 import { equal } from 'assert';
+import { GroupRoleValues } from '../services/RoleService';
+import { StatusError } from '../error/StatusError';
 
 const prisma = new PrismaClient()
 
@@ -48,7 +50,8 @@ class GroupRepository {
         await prisma.userGroupRelModel.create({
             data: {
                 userId: creatorId,
-                groupId: groupModel.id
+                groupId: groupModel.id,
+                roles: GroupRoleValues.ADMIN
             }
         })
         return groupModel
@@ -77,6 +80,75 @@ class GroupRepository {
                 id: id
             }
         });
+    }
+
+    // Inivtations
+    static async createInvitation(input: GroupInvitationInput, groupId: string) : Promise<GroupInvitation> {
+        return await prisma.groupInvitation.create({
+            data: {
+                validity: input.validityDate,
+                counter: input.invitationCounter,
+                groupId: groupId
+            }
+        })
+    }
+
+    static async getInvitationById(invitationId: string) : Promise<GroupInvitation> {
+        const invitation: GroupInvitation | null = await prisma.groupInvitation.findFirst({
+            where: {
+                id: invitationId
+            }
+        })
+        if (invitation == null)
+            throw new StatusError(404, "Invitation not found")
+        return invitation
+    }
+
+    static async createUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelModel>
+    {
+        return await prisma.userGroupRelModel.create({
+            data: {
+                userId: userId,
+                groupId: groupId,
+                roles: 0
+            }
+        })
+    }
+
+    static async updateInvitation(model: GroupInvitation) : Promise<GroupInvitation>
+    {
+        return await prisma.groupInvitation.update({
+            where: {
+                id: model.id
+
+            },
+            data: {
+                ...model
+            }
+        })
+    }
+
+    static async updateUserGroupRelation(model: UserGroupRelModel) : Promise<UserGroupRelModel>
+    {
+        return await prisma.userGroupRelModel.update({
+            where: {
+                userId_groupId: { userId: model.userId, groupId: model.groupId }
+
+            },
+            data: {
+                ...model
+            }
+        })
+    }
+
+    static async removeUserGroupRelation(userId: string, groupId: string)
+    {
+        await prisma.userGroupRelModel.delete({
+            where: {
+                userId_groupId: { userId: userId, groupId: groupId }
+
+            }
+        })
     }
 }
 

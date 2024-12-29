@@ -47,6 +47,17 @@ model Group {
     tiles           Tile[]
     userRel         UserGroupRelModel[]
     creator         User      @relation(fields: [creatorId], references: [id])
+    invitations     GroupInvitation[]
+}
+
+model GroupInvitation {
+    id              String    @id @default(uuid()) @unique
+    groupId         String
+    counter         Int
+    createdAt       DateTime  @default(now())
+    validity        DateTime  @default(now())
+    canceled        Boolean   @default(false)
+    group           Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 model Session {
@@ -96,8 +107,8 @@ model UserGroupRelModel {
     userId        String
     groupId       String
     roles         Int       @default(0)
-    user          User      @relation(fields: [userId], references: [id])
-    group         Group     @relation(fields: [groupId], references: [id])
+    user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    group         Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
     @@id([userId, groupId])
 }
@@ -106,8 +117,8 @@ model UserSessionRelModel {
     userId        String
     sessionId     String
     checekd       Boolean
-    user          User      @relation(fields: [userId], references: [id])
-    session       Session   @relation(fields: [sessionId], references: [id])
+    user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    session       Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
     @@id([userId, sessionId])
 }

@@ -1,10 +1,10 @@
 import express from 'express';
 import { Request, Response } from 'express';
 import { TypedRequest } from './Request';
-import { GroupInput, RefreshInput } from '../inputs/inputs';
+import { GroupInput, GroupInvitationInput, RefreshInput } from '../inputs/inputs';
 import GroupService from '../services/GroupService';
 import { ExceptionHandlerMiddleware, CheckAccessMiddleware } from '../middleware/middlewares';
-import { RoleValues } from '../services/RoleService';
+import { GroupRoleValues, RoleValues } from '../services/RoleService';
 
 const router = express.Router();
 
@@ -72,6 +72,37 @@ router.put('/:id', [
     ExceptionHandlerMiddleware(
         async (req: TypedRequest<{}, GroupInput>, res: Response) => {
             res.status(200).json(await GroupService.updateGroupById(req.body, req.params.id));
+        }
+    )
+]);
+
+// Invitations
+
+router.post('/:groupId/invitation',[
+    ExceptionHandlerMiddleware(CheckAccessMiddleware([], [GroupRoleValues.ADMIN])),
+    ExceptionHandlerMiddleware(
+        async (req: TypedRequest<{}, GroupInvitationInput>, res: Response) => {
+            res.status(201).json(await GroupService.createInvitation(req.body, req.params.groupId));
+        }
+    )
+]
+);
+
+router.put('/join/:invitationId',[
+    ExceptionHandlerMiddleware(CheckAccessMiddleware()),
+    ExceptionHandlerMiddleware(
+        async (req: TypedRequest<{}, {}>, res: Response) => {
+            res.status(200).json(await GroupService.joinGroup(req.userId ? req.userId : "", req.params.invitationId));
+        }
+    )
+]
+);
+
+router.delete('/:groupId/kick/:userId', [
+    ExceptionHandlerMiddleware(CheckAccessMiddleware()),
+    ExceptionHandlerMiddleware(
+        async (req: TypedRequest<{}, {}>, res: Response) => {
+            res.status(200).json(await GroupService.removeUserFromGroup(req.params.userid, req.params.groupId));
         }
     )
 ]);

@@ -89,7 +89,7 @@ class UserRepository {
             return user;
     }
     // Create
-    static async createUser(input: Prisma.UserCreateInput, roles: number = RoleValues.USER) : Promise<User> {
+    static async createUser(input: Prisma.UserCreateInput, roles: number = 0) : Promise<User> {
         return await prisma.user.create({
             data: {
                 ...input,

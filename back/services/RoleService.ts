@@ -5,9 +5,13 @@ import { Role, UserGroupRelModel } from '@prisma/client';
 import RoleRepository from '../repositories/RoleRepository';
 
 export enum RoleValues {
-    USER = (1 << 0),
-    ADMIN = (1 << 1)
+    ADMIN = (1 << 0)
 }
+
+export enum GroupRoleValues {
+    ADMIN = (1 << 0)
+}
+
 class RoleService {
     // Get
     static async userHasRoleById(userId: string, roles: number[]) : Promise<boolean> {
@@ -29,10 +33,10 @@ class RoleService {
 
     static userHasRole(currentRoles: number, roles: number[]) : boolean {
         for (let i: number = 0; i < roles.length; ++i) {
-            if ((roles[i] & currentRoles) == 0)
-                return false
+            if (roles[i] & currentRoles)
+                return true
         }
-        return true;
+        return false
     }
 }
 

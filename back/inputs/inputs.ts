@@ -17,3 +17,9 @@ export interface RefreshInput {
     accessToken: string
     refreshToken: string
 }
+
+export interface GroupInvitationInput {
+    validity: string,
+    invitationCounter: number,
+    validityDate: Date
+}

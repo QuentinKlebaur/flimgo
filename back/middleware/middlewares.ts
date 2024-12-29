@@ -26,7 +26,6 @@ export function CheckAccessMiddleware(roles: number[] = [], groupRoles: number[]
             throw new StatusError(401, "No token")
 
         const userId: string = (await UserRepository.getUserByAcessToken(token)).id
-        console.log(`USER ID: ${userId}`)
         req.userId = userId;
         if (roles.length)
             if (!await RoleService.userHasRoleById(userId, roles))
