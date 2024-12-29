@@ -141,6 +141,19 @@ class GroupRepository {
         })
     }
 
+    static async getUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelModel>
+    {
+        let rel: UserGroupRelModel | null = await prisma.userGroupRelModel.findFirst({
+            where: {
+                userId: userId,
+                groupId: groupId
+            }
+        })
+        if (rel == null)
+            throw new StatusError(404, "User not found")
+        return rel
+    }
+
     static async removeUserGroupRelation(userId: string, groupId: string)
     {
         await prisma.userGroupRelModel.delete({

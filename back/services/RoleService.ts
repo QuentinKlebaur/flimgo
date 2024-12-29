@@ -25,6 +25,7 @@ class RoleService {
 
         return RoleService.userHasRole(currentRoles.roles, roles)
     }
+
     static async userHasGroupRoleById(userId: string, groupId: string, roles: number[]) : Promise<boolean> {
         const currentRoles: UserGroupRelModel = await RoleRepository.getUserGroupRoleById(userId, groupId)
 
@@ -32,6 +33,8 @@ class RoleService {
     }
 
     static userHasRole(currentRoles: number, roles: number[]) : boolean {
+        if (roles.length == 0)
+            return true
         for (let i: number = 0; i < roles.length; ++i) {
             if (roles[i] & currentRoles)
                 return true

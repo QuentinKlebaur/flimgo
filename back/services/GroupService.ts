@@ -1,7 +1,7 @@
 import GroupRepository from '../repositories/GroupRepository';
 import { GroupInput, GroupInvitationInput } from '../inputs/inputs';
 import { GroupInvitationOutput, GroupOutput } from '../outputs/outputs';
-import { Group, GroupInvitation } from '@prisma/client';
+import { Group, GroupInvitation, UserGroupRelModel } from '@prisma/client';
 import { StatusError } from '../error/StatusError';
 
 class GroupService {
@@ -48,6 +48,11 @@ class GroupService {
 
     static async joinGroup(userId: string, invitationId: string) {
         let invitation: GroupInvitation = await GroupRepository.getInvitationById(invitationId)
+        try {
+            let userGroupRel: UserGroupRelModel = await GroupRepository.getUserGroupRelation(userId, invitation.groupId)
+
+            throw (new StatusError(400, `User already belongs to the group`))
+        } catch {}
 
         if (invitation.counter == 0 || (new Date(invitation.validity)).getTime() < new Date().getTime()) {
             throw new StatusError(400, `This invitation has expired`)
