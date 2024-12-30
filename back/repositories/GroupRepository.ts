@@ -46,7 +46,7 @@ class GroupRepository {
             creatorId: creatorId
         }
         const groupModel: Group = await prisma.group.create({ data: group })
-        await prisma.userGroupRelModel.create({
+        await prisma.userGroupRelation.create({
             data: {
                 userId: creatorId,
                 groupId: groupModel.id,
@@ -105,7 +105,7 @@ class GroupRepository {
 
     static async createUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelation>
     {
-        return await prisma.userGroupRelModel.create({
+        return await prisma.userGroupRelation.create({
             data: {
                 userId: userId,
                 groupId: groupId,
@@ -129,7 +129,7 @@ class GroupRepository {
 
     static async updateUserGroupRelation(model: UserGroupRelation) : Promise<UserGroupRelation>
     {
-        return await prisma.userGroupRelModel.update({
+        return await prisma.userGroupRelation.update({
             where: {
                 userId_groupId: { userId: model.userId, groupId: model.groupId }
 
@@ -142,7 +142,7 @@ class GroupRepository {
 
     static async getUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelation>
     {
-        let rel: UserGroupRelation | null = await prisma.userGroupRelModel.findFirst({
+        let rel: UserGroupRelation | null = await prisma.userGroupRelation.findFirst({
             where: {
                 userId: userId,
                 groupId: groupId
@@ -155,7 +155,7 @@ class GroupRepository {
 
     static async removeUserGroupRelation(userId: string, groupId: string)
     {
-        await prisma.userGroupRelModel.delete({
+        await prisma.userGroupRelation.delete({
             where: {
                 userId_groupId: { userId: userId, groupId: groupId }
 

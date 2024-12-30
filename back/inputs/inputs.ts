@@ -19,10 +19,11 @@ export interface RefreshInput {
 }
 
 export interface GroupInvitationInput {
-    validity: string,
-    invitationCounter: number,
+    validity: string
+    invitationCounter: number
     validityDate: Date
 }
 
 export interface TileInput {
+    text: string
 }
