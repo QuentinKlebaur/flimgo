@@ -21,7 +21,7 @@ class RoleRepository {
     }
 
     static async getUserGroupRoleById(userId: string, groupId: string) : Promise<UserGroupRelation> {
-        const role: UserGroupRelation | null = await prisma.userGroupRelModel.findFirst({
+        const role: UserGroupRelation | null = await prisma.userGroupRelation.findFirst({
             where: {
                 userId: userId,
                 groupId: groupId

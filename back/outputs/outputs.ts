@@ -1,4 +1,4 @@
-import { Group, User, AuthenticationSession, Prisma, GroupInvitation } from '@prisma/client'
+import { Group, User, AuthenticationSession, Tile, Prisma, GroupInvitation } from '@prisma/client'
 
 export class GroupOutput {
     id: string
@@ -47,5 +47,21 @@ export class GroupInvitationOutput {
         this.counter = model.counter
         this.validity = model.validity
         this.canceled = model.canceled
+    }
+}
+
+export class TileOutput {
+    id: string
+    groupId: string
+    relatedUserId: string | null
+    text: string
+    createdAt: Date
+
+    constructor(model: Tile) {
+        this.id = model.id,
+        this.groupId = model.groupId,
+        this.relatedUserId = model.userId,
+        this.text = model.text,
+        this.createdAt = model.createdAt
     }
 }
