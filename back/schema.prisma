@@ -15,8 +15,8 @@ model User {
     createdAt       DateTime  @default(now())
     bingos          Bingo[]
     tiles           Tile[]
-    sessionRel      UserSessionRelModel[]
-    groupRel        UserGroupRelModel[]
+    sessionRel      UserSessionRelation[]
+    groupRel        UserGroupRelation[]
     authSessions    AuthenticationSession[]
     role            Role?
     createdGroups   Group[]
@@ -45,7 +45,7 @@ model Group {
     createdAt       DateTime  @default(now())
     sessions        Session[]
     tiles           Tile[]
-    userRel         UserGroupRelModel[]
+    userRel         UserGroupRelation[]
     creator         User      @relation(fields: [creatorId], references: [id])
     invitations     GroupInvitation[]
 }
@@ -69,7 +69,7 @@ model Session {
     finishedAt      DateTime?
     group           Group     @relation(fields: [groupId], references: [id])
     bingos          Bingo[]
-    userRel         UserSessionRelModel[]
+    userRel         UserSessionRelation[]
 }
 
 model Tile {
@@ -80,7 +80,7 @@ model Tile {
     createdAt       DateTime  @default(now())
     group           Group     @relation(fields: [groupId], references: [id])
     user            User?     @relation(fields: [userId], references: [id])
-    bingoRel        BingoTileRelModel[]
+    bingoRel        BingoTileRelation[]
 }
 
 model Bingo {
@@ -90,10 +90,10 @@ model Bingo {
     validated       Boolean
     user            User?     @relation(fields: [userId], references: [id])
     session         Session   @relation(fields: [sessionId], references: [id])
-    tileRel         BingoTileRelModel[]
+    tileRel         BingoTileRelation[]
 }
 
-model BingoTileRelModel {
+model BingoTileRelation {
     bingoId       String
     tileId        String
     position      Int
@@ -103,7 +103,7 @@ model BingoTileRelModel {
     @@id([bingoId, tileId])
 }
 
-model UserGroupRelModel {
+model UserGroupRelation {
     userId        String
     groupId       String
     roles         Int       @default(0)
@@ -113,7 +113,7 @@ model UserGroupRelModel {
     @@id([userId, groupId])
 }
 
-model UserSessionRelModel {
+model UserSessionRelation {
     userId        String
     sessionId     String
     checekd       Boolean

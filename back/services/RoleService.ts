@@ -1,7 +1,7 @@
 import GroupRepository from '../repositories/GroupRepository';
 import { GroupInput } from '../inputs/inputs';
 import { GroupOutput } from '../outputs/outputs';
-import { Role, UserGroupRelModel } from '@prisma/client';
+import { Role, UserGroupRelation } from '@prisma/client';
 import RoleRepository from '../repositories/RoleRepository';
 
 export enum RoleValues {
@@ -27,7 +27,7 @@ class RoleService {
     }
 
     static async userHasGroupRoleById(userId: string, groupId: string, roles: number[]) : Promise<boolean> {
-        const currentRoles: UserGroupRelModel = await RoleRepository.getUserGroupRoleById(userId, groupId)
+        const currentRoles: UserGroupRelation = await RoleRepository.getUserGroupRoleById(userId, groupId)
 
         return RoleService.userHasRole(currentRoles.roles, roles)
     }

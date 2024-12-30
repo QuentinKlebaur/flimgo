@@ -23,3 +23,6 @@ export interface GroupInvitationInput {
     invitationCounter: number,
     validityDate: Date
 }
+
+export interface TileInput {
+}

@@ -1,6 +1,5 @@
-import { PrismaClient, Group, Prisma, GroupInvitation, UserGroupRelModel } from '@prisma/client'
+import { PrismaClient, Group, Prisma, GroupInvitation, UserGroupRelation } from '@prisma/client'
 import { GroupInput, GroupInvitationInput } from '../inputs/inputs';
-import { equal } from 'assert';
 import { GroupRoleValues } from '../services/RoleService';
 import { StatusError } from '../error/StatusError';
 
@@ -104,7 +103,7 @@ class GroupRepository {
         return invitation
     }
 
-    static async createUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelModel>
+    static async createUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelation>
     {
         return await prisma.userGroupRelModel.create({
             data: {
@@ -128,7 +127,7 @@ class GroupRepository {
         })
     }
 
-    static async updateUserGroupRelation(model: UserGroupRelModel) : Promise<UserGroupRelModel>
+    static async updateUserGroupRelation(model: UserGroupRelation) : Promise<UserGroupRelation>
     {
         return await prisma.userGroupRelModel.update({
             where: {
@@ -141,9 +140,9 @@ class GroupRepository {
         })
     }
 
-    static async getUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelModel>
+    static async getUserGroupRelation(userId: string, groupId: string) : Promise<UserGroupRelation>
     {
-        let rel: UserGroupRelModel | null = await prisma.userGroupRelModel.findFirst({
+        let rel: UserGroupRelation | null = await prisma.userGroupRelModel.findFirst({
             where: {
                 userId: userId,
                 groupId: groupId

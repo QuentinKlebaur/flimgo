@@ -1,4 +1,4 @@
-import { PrismaClient, Role, UserGroupRelModel, Prisma } from '@prisma/client'
+import { PrismaClient, Role, UserGroupRelation, Prisma } from '@prisma/client'
 import { UserInput } from '../inputs/inputs';
 import { equal } from 'assert';
 import { StatusError } from '../error/StatusError';
@@ -20,8 +20,8 @@ class RoleRepository {
             return role;
     }
 
-    static async getUserGroupRoleById(userId: string, groupId: string) : Promise<UserGroupRelModel> {
-        const role: UserGroupRelModel | null = await prisma.userGroupRelModel.findFirst({
+    static async getUserGroupRoleById(userId: string, groupId: string) : Promise<UserGroupRelation> {
+        const role: UserGroupRelation | null = await prisma.userGroupRelModel.findFirst({
             where: {
                 userId: userId,
                 groupId: groupId
