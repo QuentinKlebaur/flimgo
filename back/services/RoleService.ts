@@ -10,7 +10,8 @@ export enum RoleValues {
 
 export enum GroupRoleValues {
     ADMIN = (1 << 0),
-    TILES_MANAGEMENT = (1 << 1)
+    TILES_MANAGEMENT = (1 << 1),
+    SESSION_MANAGEMENT = (1 << 2)
 }
 
 class RoleService {

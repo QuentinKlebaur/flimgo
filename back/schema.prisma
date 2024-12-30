@@ -116,7 +116,7 @@ model UserGroupRelation {
 model UserSessionRelation {
     userId        String
     sessionId     String
-    checekd       Boolean
+    checked       Boolean
     user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     session       Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 

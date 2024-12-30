@@ -27,3 +27,7 @@ export interface GroupInvitationInput {
 export interface TileInput {
     text: string
 }
+
+export interface SessionInput {
+    title: string
+}

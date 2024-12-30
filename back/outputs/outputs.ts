@@ -1,4 +1,24 @@
-import { Group, User, AuthenticationSession, Tile, Prisma, GroupInvitation } from '@prisma/client'
+import { Group, User, AuthenticationSession, Tile, Prisma, GroupInvitation, Session } from '@prisma/client'
+
+export class SessionOutput {
+    id: string;
+    groupId: string;
+    title: string;
+    createdAt: Date;
+    startedAt?: Date;
+    finishedAt?: Date;
+
+    constructor(model: Session) {
+        this.id = model.id
+        this.groupId = model.groupId
+        this.title = model.flimTitle
+        this.createdAt = model.createdAt
+        if (model.startedAt)
+            this.startedAt = model.startedAt
+        if (model.finishedAt)
+            this.finishedAt = model.finishedAt
+    }
+}
 
 export class GroupOutput {
     id: string
