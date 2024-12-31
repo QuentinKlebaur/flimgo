@@ -2,6 +2,8 @@ import { PrismaClient, Session, UserSessionRelation, Prisma } from '@prisma/clie
 import { StatusError } from '../error/StatusError';
 import { SessionInput } from '../inputs/inputs';
 
+export interface SessionWithUsers extends Prisma.SessionGetPayload<{include: { userRel: {include: {user: true}} }}> {}
+
 const prisma = new PrismaClient()
 
 class SessionRepository {
@@ -32,6 +34,19 @@ class SessionRepository {
         })
     }
 
+    static async getSessionWithUsersById(id: string) : Promise<SessionWithUsers> {
+        return await prisma.session.findFirstOrThrow({
+            where: { id: id },
+            include: {
+                userRel: {
+                    include: {
+                        user: true
+                    }
+                }
+            }
+        })
+    }
+
     static async getSessions() : Promise<Session[]> {
         return await prisma.session.findMany()
     }
@@ -52,8 +67,7 @@ class SessionRepository {
         await prisma.userSessionRelation.create({
             data: {
                 userId: userId,
-                sessionId: sessionId,
-                checked: false
+                sessionId: sessionId
             }
         })
     }

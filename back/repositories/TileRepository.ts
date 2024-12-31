@@ -46,6 +46,17 @@ class TileRepository {
         })
     }
 
+    static async getTilesByGroupIdAndUsersId(groupId: string, userIds: string[]) : Promise<Tile[]> {
+        let array: {userId: string | null}[] = userIds.map((userId) => { return { userId: userId } })
+        array.push({ userId: null })
+        return await prisma.tile.findMany({
+            where: {
+                groupId: groupId,
+                OR: array
+            }
+        })
+    }
+
     static async getTilesByUserId(userId: string) : Promise<Tile[]> {
         return await prisma.tile.findMany({
             where: { userId: userId }

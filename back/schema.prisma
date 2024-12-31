@@ -87,7 +87,7 @@ model Bingo {
     id              String    @id @default(uuid()) @unique
     userId          String?
     sessionId       String
-    validated       Boolean
+    validated       Boolean   @default(false)
     user            User?     @relation(fields: [userId], references: [id])
     session         Session   @relation(fields: [sessionId], references: [id])
     tileRel         BingoTileRelation[]
@@ -97,6 +97,7 @@ model BingoTileRelation {
     bingoId       String
     tileId        String
     position      Int
+    checked       Boolean   @default(false)
     bingo         Bingo     @relation(fields: [bingoId], references: [id])
     tile          Tile      @relation(fields: [tileId], references: [id])
 
@@ -116,7 +117,6 @@ model UserGroupRelation {
 model UserSessionRelation {
     userId        String
     sessionId     String
-    checked       Boolean
     user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     session       Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 

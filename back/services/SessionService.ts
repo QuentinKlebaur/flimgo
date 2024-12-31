@@ -1,8 +1,11 @@
 import SessionRepository from '../repositories/SessionRepository';
+import TileRepository from '../repositories/TileRepository';
+import BingoRepository from '../repositories/BingoRepository';
 import { SessionInput } from '../inputs/inputs';
 import { SessionOutput } from '../outputs/outputs';
-import { Session, UserSessionRelation } from '@prisma/client';
+import { Bingo, Session, Tile, UserSessionRelation } from '@prisma/client';
 import { StatusError } from '../error/StatusError';
+import { SessionWithUsers } from '../repositories/SessionRepository';
 
 class SessionService {
     static async getSessions() : Promise<SessionOutput[]> {
@@ -70,8 +73,39 @@ class SessionService {
         } catch {
             throw new StatusError(404, `Session not found`)
         }
-        relation.checked = checked
+//        relation.checked = checked
         await SessionRepository.updateSessionUserRelation(relation)
+    }
+
+    static async startSession(sessionId: string) {
+        let session: SessionWithUsers
+        try {
+            session = await SessionRepository.getSessionWithUsersById(sessionId)
+        } catch {
+            throw new StatusError(404, `Session not found`)
+        }
+        let participantIds: string[] = session.userRel.map((rel: UserSessionRelation) => rel.userId)
+        const tiles: Tile[] = await TileRepository.getTilesByGroupIdAndUsersId(session.groupId, participantIds)
+        if (tiles.length < 25)
+            throw new StatusError(400, `Not enough tiles in the group. You need at least 25 tiles to start a session`)
+        const bingos: Bingo[] = await BingoRepository.createBingos(participantIds, sessionId)
+        for (let bingo of bingos) {
+            let randomTiles: Tile[] = tiles.sort(() => Math.random() - 0.5).slice(0, 25)
+            await BingoRepository.createBingoUserRelations(randomTiles.map(t => t.id), bingo.id)
+        }
+        session.startedAt = new Date()
+        await SessionRepository.updateSession(session)
+    }
+
+    static async finishSession(sessionId: string) {
+        let session: SessionWithUsers
+        try {
+            session = await SessionRepository.getSessionWithUsersById(sessionId)
+        } catch {
+            throw new StatusError(404, `Session not found`)
+        }
+        session.finishedAt = new Date()
+        await SessionRepository.updateSession(session)
     }
 }
 

@@ -1,4 +1,5 @@
-import { Group, User, AuthenticationSession, Tile, Prisma, GroupInvitation, Session } from '@prisma/client'
+import { Group, User, AuthenticationSession, Tile, Bingo, Prisma, GroupInvitation, Session } from '@prisma/client'
+import { BingoTileRelationWithTile, BingoWithTiles } from '../repositories/BingoRepository';
 
 export class SessionOutput {
     id: string;
@@ -83,5 +84,20 @@ export class TileOutput {
         this.relatedUserId = model.userId,
         this.text = model.text,
         this.createdAt = model.createdAt
+    }
+}
+
+export class BingoOutput {
+    id: string
+    sessionId: string
+    userId: string | null
+    tiles?: TileOutput[]
+
+    constructor(model: BingoWithTiles | Bingo) {
+        this.id = model.id
+        this.sessionId = model.sessionId
+        this.userId = model.userId
+        if ('tiles' in model)
+            this.tiles = model.tiles.map((t: BingoTileRelationWithTile) => new TileOutput(t.tile))
     }
 }

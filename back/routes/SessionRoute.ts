@@ -112,4 +112,22 @@ router.delete('/:sessionId/leave', [
     )
 ]);
 
+router.put('/:sessionId/start', [
+    ExceptionHandlerMiddleware(CheckAccessMiddleware()),
+    ExceptionHandlerMiddleware(
+        async (req: TypedRequest<{}, {}>, res: Response) => {
+            res.status(200).json(await SessionService.startSession(req.params.sessionId));
+        }
+    )
+]);
+
+router.put('/:sessionId/finish', [
+    ExceptionHandlerMiddleware(CheckAccessMiddleware()),
+    ExceptionHandlerMiddleware(
+        async (req: TypedRequest<{}, {}>, res: Response) => {
+            res.status(200).json(await SessionService.finishSession(req.params.sessionId));
+        }
+    )
+]);
+
 export default router;
