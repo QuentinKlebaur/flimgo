@@ -94,7 +94,14 @@ class SessionService {
             await BingoRepository.createBingoUserRelations(randomTiles.map(t => t.id), bingo.id)
         }
         session.startedAt = new Date()
-        await SessionRepository.updateSession(session)
+        await SessionRepository.updateSession({
+            id: session.id,
+            groupId: session.groupId,
+            flimTitle: session.flimTitle,
+            createdAt: session.createdAt,
+            startedAt: session.finishedAt,
+            finishedAt: session.finishedAt
+        })
     }
 
     static async finishSession(sessionId: string) {

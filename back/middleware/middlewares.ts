@@ -11,8 +11,10 @@ export function ExceptionHandlerMiddleware(func: any) {
         } catch (e) {
             if (e instanceof StatusError)
                 res.status(e.status).json({message: e.message})
-            else
+            else {
+                console.log(e)
                 res.status(500).json({message: "Something went wrong"})
+            }
         }
     }
 }

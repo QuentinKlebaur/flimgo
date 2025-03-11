@@ -67,7 +67,7 @@ router.post('/group/:groupId', [
     ExceptionHandlerMiddleware(CheckAccessMiddleware([], [GroupRoleValues.ADMIN, GroupRoleValues.SESSION_MANAGEMENT])),
     ExceptionHandlerMiddleware(
         async (req: TypedRequest<{}, SessionInput>, res: Response) => {
-            res.status(200).json(await SessionService.createSession(req.body, req.params.sessionId));
+            res.status(200).json(await SessionService.createSession(req.body, req.params.groupId));
         }
     )
 ]);

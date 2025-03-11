@@ -21,7 +21,7 @@ class BingoService {
 
     static async getBingoByUserId(userId: string) : Promise<BingoOutput[]>
     {
-        return (await BingoRepository.getBingosByUserId(userId)).map((b: Bingo) => new BingoOutput(b));
+        return (await BingoRepository.getBingosByUserId(userId)).map((b: BingoWithTiles) => new BingoOutput(b));
     }
 
     static async getBingoByUserAndSessionId(userId: string, sessionId: string) : Promise<BingoOutput>

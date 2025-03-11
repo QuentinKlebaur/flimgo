@@ -98,7 +98,7 @@ model BingoTileRelation {
     tileId        String
     position      Int
     checked       Boolean   @default(false)
-    bingo         Bingo     @relation(fields: [bingoId], references: [id])
+    bingo         Bingo     @relation(fields: [bingoId], references: [id], onDelete: Cascade)
     tile          Tile      @relation(fields: [tileId], references: [id])
 
     @@id([bingoId, tileId])

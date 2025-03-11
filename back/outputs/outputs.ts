@@ -97,7 +97,9 @@ export class BingoOutput {
         this.id = model.id
         this.sessionId = model.sessionId
         this.userId = model.userId
-        if ('tiles' in model)
-            this.tiles = model.tiles.map((t: BingoTileRelationWithTile) => new TileOutput(t.tile))
+            console.log(model)
+        if ('tileRel' in model) {
+            this.tiles = model.tileRel.map((t: BingoTileRelationWithTile) => new TileOutput(t.tile))
+        }
     }
 }

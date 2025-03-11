@@ -73,8 +73,8 @@ class BingoRepository {
         })
     }
 
-    static async getBingosByUserId(userId: string) : Promise<BingoWithTiles> {
-        return await prisma.bingo.findFirstOrThrow({
+    static async getBingosByUserId(userId: string) : Promise<BingoWithTiles[]> {
+        return await prisma.bingo.findMany({
             where: {
                 userId: userId
             },
