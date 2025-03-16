@@ -20,7 +20,6 @@ const NavbarTile = (props : NavbarTileProps) => {
 
 interface NavbarProps {
   routes: RouteData[]
-  a: number
 }
 
 const Navbar = (props: NavbarProps) => {

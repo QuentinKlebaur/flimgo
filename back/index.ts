@@ -7,13 +7,19 @@ import TileRoute  from './routes/TileRoute';
 import express from 'express';
 import swaggerUi from "swagger-ui-express";
 const swaggerjsonFilePath = require("./swagger.json");
+const cors = require("cors");
 require('dotenv').config()
+
+const corsOptions = {
+    origin: "*",
+};
 
 const app = express();
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors(corsOptions));
 
 app.use('/authentication', AuthenticationRoute);
 app.use('/bingos', BingoRoute);
