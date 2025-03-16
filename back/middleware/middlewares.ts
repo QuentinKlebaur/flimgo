@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import { TypedRequest } from '../routes/Request';
 import RoleService from "../services/RoleService";
 import UserRepository from "../repositories/UserRepository";
+import AuthenticationRepository from "../repositories/AuthenticationRepository";
+import { AuthenticationSession } from "@prisma/client";
 
 export function ExceptionHandlerMiddleware(func: any) {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +31,14 @@ export function CheckAccessMiddleware(roles: number[] = [], groupRoles: number[]
 
         const userId: string = (await UserRepository.getUserByAcessToken(token)).id
         req.userId = userId;
+        try {
+            const session: AuthenticationSession = await AuthenticationRepository.getAuthSessionByAccessToken(token);
+
+            if (new Date() > session.accessValidUntil)
+                throw new StatusError(401, "AccessToken expired")
+        } catch {
+            throw new StatusError(401, "Invalid token")
+        }
         if (roles.length)
             if (!await RoleService.userHasRoleById(userId, roles))
                 throw new StatusError(401, "Check your roles")

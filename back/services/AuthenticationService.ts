@@ -63,15 +63,19 @@ class AuthenticationService {
     static async refresh(input: RefreshInput) : Promise<LoginOutput>
     {
         let user: Prisma.UserGetPayload<{include: { authSessions: true };}>;
+        let userSession: AuthenticationSession |undefined;
         try {
             user = await UserRepository.getUserByRefreshToken(input.refreshToken);
-            if (user.authSessions.find((session: AuthenticationSession) => session.refreshToken == input.refreshToken)?.accessToken != input.accessToken)
+            userSession = user.authSessions.find((session: AuthenticationSession) => session.refreshToken == input.refreshToken && session.accessToken == input.accessToken)
+            if (userSession == undefined)
                 throw new StatusError(401, "Session is invalid")
         } catch (e) {
             if (e instanceof StatusError && e.status == 404)
                 throw new StatusError(401, "Session is invalid")
             else throw e
         }
+        if (new Date() > userSession.refreshValidUntil)
+            throw new StatusError(401, "RefreshToken expired")
         return await this.generateNewSession(user.id);
     }
 

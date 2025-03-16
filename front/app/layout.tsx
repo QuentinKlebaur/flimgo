@@ -34,15 +34,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-    <html lang="en">
-    <MantineProvider theme={theme}>
+    <html data-lt-installed="true">
       <body className={inter.className}>
-        <Navigation routes={routes} />
+        <MantineProvider theme={theme}>
+          <Navigation routes={routes} />
           {children}
-        </body>
-      </MantineProvider>
+        </MantineProvider>
+      </body>
     </html>
-    </>
   );
 }
