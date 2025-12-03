@@ -36,12 +36,10 @@ export class GroupOutput {
 export class UserOutput {
     email: string
     username: string
-    hashedPassword: string
 
     constructor(model: User) {
         this.email = model.email
         this.username = model.username
-        this.hashedPassword = model.hashedPassword
     }
 }
 

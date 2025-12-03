@@ -4,6 +4,12 @@ import "./globals.css";
 import RouteData from "./types/route_data";
 import '@mantine/core/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
+import FlimgoRequester from "./request/flimgo/flimgoRequest";
+import { UserData } from "./components/navigation/navbar";
+import { UserOutput } from "../../back/outputs/outputs";
+import UserSingleton from "./utils/userSingleton";
+import { SessionProvider } from "next-auth/react"
+import { Provider } from "./Providers";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -37,8 +43,7 @@ export default function RootLayout({
     <html data-lt-installed="true">
       <body className={inter.className}>
         <MantineProvider theme={theme}>
-          <Navigation routes={routes} />
-          {children}
+          <Provider children={children}/>
         </MantineProvider>
       </body>
     </html>

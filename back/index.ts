@@ -4,6 +4,7 @@ import GroupRoute  from './routes/GroupRoute';
 import ProfileRouter  from './routes/ProfileRoute';
 import SessionRoute  from './routes/SessionRoute';
 import TileRoute  from './routes/TileRoute';
+import UserRoute from './routes/UserRoute'
 import express from 'express';
 import swaggerUi from "swagger-ui-express";
 const swaggerjsonFilePath = require("./swagger.json");
@@ -27,6 +28,7 @@ app.use('/groups', GroupRoute);
 app.use('/profile', ProfileRouter);
 app.use('/sessions', SessionRoute);
 app.use('/tiles', TileRoute);
+app.use('/user', UserRoute);
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerjsonFilePath));
 

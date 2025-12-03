@@ -26,18 +26,24 @@ export default class Requester {
             method: init?.method,
             headers: header
         }
+        console.log(this.baseURL + endpoint)
         return await fetch(this.baseURL + endpoint, myInit);
     }
 
     async fetchAuth(endpoint: string, init?: globalThis.RequestInit): Promise<Response> {
-        let header = new Headers(init?.headers)
-        header.append("Authorization", `Bearer ${this.bearerToken}`)
+        let header: Headers = new Headers(init?.headers)
+        let accessToken: string | null = localStorage.getItem("accessToken")
+
+        console.log(`Token: ${accessToken}`)
+        if (!accessToken)
+            throw "No token" // Todo Use Exception
+        header.append("Authorization", `Bearer ${accessToken}`)
         let myInit: globalThis.RequestInit = {
             body: init?.body,
             method: init?.method,
             headers: header
         }
-        let res = await fetch(this.baseURL + endpoint, myInit)
+        let res = await this.fetch(endpoint, myInit)
         if (res.status == 401)
             this.refreshFunction()
         else
